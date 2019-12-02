@@ -27,11 +27,11 @@ docker run \
 ```bash
 docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -e DRONE_RPC_PROTO=http \
-  -e DRONE_RPC_HOST=cathay-james.csie.org \
-  -e DRONE_RPC_SECRET=72c62460b619f775b760e88820cfad50 \
+  -e DRONE_RPC_PROTO=${HTTP_OR_HTTPS} \
+  -e DRONE_RPC_HOST=${DRONE_HOST} \
+  -e DRONE_RPC_SECRET=${YOUR_SECRET} \
   -e DRONE_RUNNER_CAPACITY=2 \
-  -e DRONE_RUNNER_NAME=cathay-james.csie.org:8000 \
+  -e DRONE_RUNNER_NAME=${HOST:PORT} \
   --privileged=true \
   -p 8000:3000 \
   --restart always \
