@@ -1,6 +1,6 @@
-# Prometheus Setup with reverse proxy in nginx
+## nginx reverse proxy
 
-以前自己的網站是使用subdomain導向不同的server，但現在手上沒有第二個subdomain了，所以希望在nginx實現用不同的location導向不同server，例如：example.com/prometheus/ 會導向 http://localhost:9090/ ; example.com/grafana/ 導向 http://localhost:9099/ 。
+以前自己的網站是使用subdomain導向不同的server，但現在手上沒有第二個subdomain了，所以希望在nginx實現用不同的location導向不同server，例如：example.com/prometheus/ 會導向 http://localhost:9090/ ; example.com/grafana/ 導向 http://localhost:3000/ 。
 
 ## nginx setup
 ``` sh
@@ -13,7 +13,7 @@ location /prometheus/ {
 }
 ```
 
-## Prometheus setup
+## Prometheus and Grafana setup
 ```yaml
 # docker-compose.yml
 version: '3.2'
@@ -25,9 +25,20 @@ services:
             command:
             - --config.file=/etc/prometheus/prometheus.yml
             - --web.route-prefix=/
-            - --web.external-url=http://cathay-james.csie.org/prometheus
+            - --web.external-url=http://cathay-james.csie.org/prometheus # set for reverse proxy
             volumes:
             - ./prometheus.yml:/etc/prometheus/prometheus.yml
+           grafana:
+            image: grafana/grafana
+            volumes:
+                - grafana_data:/var/lib/grafana
+            environment:
+              - GF_SECURITY_ADMIN_PASSWORD=pass
+              - GF_SERVER_ROOT_URL=http://cathay-james.csie.org/grafana/ # set for reverse proxy
+            depends_on:
+              - prometheus
+            ports:
+              - '3000:3000'
 ```
 
 `$ docker-compose up -d`
