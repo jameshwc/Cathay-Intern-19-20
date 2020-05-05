@@ -2,7 +2,6 @@
 
 - deploy.yml
 - configmap.yml
-<<<<<<< HEAD
 - loadBalancer.yml
 - extern-dns.yml
 
@@ -15,11 +14,6 @@ kubectl apply -f deploy.yml
 kubectl apply -f loadBalancer.yml
 ```
 
-=======
-
-```kubectl create secret docker-registry gitlab --docker-server=registry.gitlab.com --docker-username=$USERNAME --docker-password=$PASSWORD --docker-email=$EMAIL```
-
->>>>>>> 8d2e06ec5472d15ca8f9c3d9f1c681fb093e281a
 ```yaml
 # configmap.yml
 apiVersion: v1
@@ -32,27 +26,17 @@ data:
   application.yml: |
     spring:
       profiles:
-<<<<<<< HEAD
         active: pro
 
     line:
       bot:
         channel-token: '123'
         channel-secret: '123'
-=======
-        active: dev
-
-    line:
-      bot:
-        channel-token: 'AFFU='
-        channel-secret: '0bc28d'
->>>>>>> 8d2e06ec5472d15ca8f9c3d9f1c681fb093e281a
         handler:
           path: /callback
       notify:
         group-token: '<group-token>'
         owner-token: '<owner-token>'
-<<<<<<< HEAD
   application-pro.yml: |
     amazon:
       dynamodb:
@@ -64,20 +48,6 @@ data:
         secretKey: 123
         bucketName: cathayct-linebot
         region: ap-northeast-1
-=======
-  application-dev.yml: |
-    amazon:
-      dynamodb:
-        endpoint: https://dynamodb.ap-northeast-1.amazonaws.com
-        region: ap-northeast-1
-      s3:
-        accessKey: 123
-        secretKey: 123 # useless but still need to fill those vars in source code
-        bucketName: cathayct-linebot
-        region: ap-northeast-1
-  aws_access_key_id: AJV
-  aws_secret_access_key: qSFw # need access to s3 and dynamodb
->>>>>>> 8d2e06ec5472d15ca8f9c3d9f1c681fb093e281a
 ```
 
 ```yaml
@@ -85,7 +55,6 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-<<<<<<< HEAD
   name: linebot
 spec:
   selector:
@@ -101,43 +70,10 @@ spec:
         name: linebot
         ports:
         - containerPort: 8080
-=======
-  name: iam-test
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: iam-test
-  template:
-    metadata:
-      labels:
-        app: iam-test
-    spec:
-      # serviceAccount: iam-linebot-role
-      containers:
-      - name: linebot
-        image: registry.gitlab.com/cloudtechlab/line-bot
-        ports:
-        - containerPort: 8000
->>>>>>> 8d2e06ec5472d15ca8f9c3d9f1c681fb093e281a
         volumeMounts:
         - name: application-config
           mountPath: /config
           readOnly: true
-<<<<<<< HEAD
-=======
-        env:
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            configMapKeyRef:
-              name: linebot
-              key: aws_access_key_id
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: linebot
-              key: aws_secret_access_key
->>>>>>> 8d2e06ec5472d15ca8f9c3d9f1c681fb093e281a
       imagePullSecrets:
         - name: gitlab
       volumes:
@@ -147,7 +83,6 @@ spec:
             items:
             - key: application.yml
               path: application.yml
-<<<<<<< HEAD
             - key: application-pro.yml
               path: application-pro.yml
 ```
@@ -252,9 +187,3 @@ spec:
 
 [external dns](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md)
 [eks with https](https://aws.amazon.com/tw/premiumsupport/knowledge-center/terminate-https-traffic-eks-acm/)
-=======
-            - key: application-dev.yml
-              path: application-dev.yml
-```
-
->>>>>>> 8d2e06ec5472d15ca8f9c3d9f1c681fb093e281a
